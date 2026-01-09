@@ -2,7 +2,7 @@
 
 **An interactive 3D laboratory for investigating geometric patterns in prime numbers.**
 
-![Prime Explorer Screenshot](screenshot.png)
+![Prime Explorer Screenshot](Isocahedron Soccer Ball Pattern.png)
 
 ## What Is This?
 
