@@ -2,7 +2,14 @@
 
 **An interactive 3D laboratory for investigating geometric patterns in prime numbers.**
 
-![Prime Explorer Screenshot](Isocahedron Soccer Ball Pattern.png)
+![Prime Explorer Screenshot](Isocahedron%20Soccer%20Ball%20Pattern.png)
+```
+
+## Option 2: Rename the file (cleaner)
+
+Rename the image to remove spaces:
+```
+Isocahedron-Soccer-Ball-Pattern.png
 
 ## What Is This?
 
