@@ -3,13 +3,6 @@
 **An interactive 3D laboratory for investigating geometric patterns in prime numbers.**
 
 ![Prime Explorer Screenshot](Isocahedron%20Soccer%20Ball%20Pattern.png)
-```
-
-## Option 2: Rename the file (cleaner)
-
-Rename the image to remove spaces:
-```
-Isocahedron-Soccer-Ball-Pattern.png
 
 ## What Is This?
 
@@ -59,10 +52,10 @@ No installation required! It's a single HTML file.
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/prime-explorer-frontier.git
+git clone https://github.com/holbizmetrics/Prime-Explorer.git
 
 # Open in browser
-open ultimate_prime_explorer_frontier.html
+open prime%20explorer.html
 ```
 
 Or just download the HTML file and double-click it.
@@ -120,13 +113,80 @@ All modes except "native" compose with the method dropdown. Native mode bypasses
 
 Our investigation established several key results:
 
-1. **Geometry cannot encode multiplicative structure** — The mapping from n → position is inherently linear, while multiplication is non-linear. No geometric arrangement can make p × q predictable from positions of p and q.
+### 1. Geometry Cannot Encode Multiplicative Structure
+The mapping from n → position is inherently linear, while multiplication is non-linear. No geometric arrangement can make p × q predictable from positions of p and q.
 
-2. **Visual "clustering" is usually density artifact** — Composites appear to cluster simply because there are more of them (~88% vs ~12% primes). Statistical tests distinguish real patterns from base-rate effects.
+### 2. Visual "Clustering" is Usually Density Artifact
+Composites appear to cluster simply because there are more of them (~88% vs ~12% primes). Statistical tests distinguish real patterns from base-rate effects.
 
-3. **DoubleHelix separation is by design** — The apparent prime/composite separation on double helix is built into the geometry, not a discovered pattern.
+### 3. DoubleHelix Separation is By Design
+The apparent prime/composite separation on double helix is built into the geometry, not a discovered pattern.
 
-4. **CRT mappings reveal divisibility, not factorization** — Numbers sharing residues cluster, but this doesn't help factor unknown numbers.
+### 4. CRT Mappings Reveal Divisibility, Not Factorization
+Numbers sharing residues cluster, but this doesn't help factor unknown numbers.
+
+### 5. Factor Proximity Effect: Real but Weak and Geometry-Dependent
+
+We conducted an extensive empirical study testing whether prime factors of semiprimes are geometrically closer to the semiprime's position than random primes. Results from 500+ random semiprime tests:
+
+#### Hit Rate by Surface (p < 0.05)
+
+| Surface | Clicks | Hits | Rate | Expected |
+|---------|--------|------|------|----------|
+| Sphere | 121 | 11 | 9.1% | 5% |
+| Torus | 132 | 11 | 8.3% | 5% |
+| Cylinder | 100 | 9 | 9.0% | 5% |
+| **Helix** | 100 | 2 | **2.0%** | 5% |
+
+#### Effect Strength When Significant
+
+| Surface | Avg Ratio | Factors Are... |
+|---------|-----------|----------------|
+| **Torus** | 0.43 | **57% closer** than random |
+| **Cylinder** | 0.69 | **31% closer** than random |
+| Sphere | 0.90 | 10% closer than random |
+| Helix | 1.00 | No closer (no effect) |
+
+```
+Effect Strength:
+Torus    ████████████████████ 57% closer
+Cylinder ██████████████       31% closer
+Sphere   █████                10% closer
+Helix    ▏                     0% closer
+```
+
+#### Key Insight: Latitude Correlation
+
+The effect exists because surfaces with latitude-like components (Sphere, Torus, Cylinder) create position correlation with n-value. Since the larger factor of a semiprime is typically 2-10% of N, it maps to a similar latitude.
+
+**The Helix has no latitude** — just linear position along the curve — so the effect completely vanishes (2% ≈ below false positive rate).
+
+#### Why This Isn't Exploitable
+
+- Only ~9% of semiprimes show the effect
+- You cannot predict WHICH semiprimes will show it
+- The effect only confirms factors you already know
+- It's a geometric artifact, not factorization information
+
+#### Polyhedral Surfaces (Cube, Tetrahedron, etc.)
+
+These show artificially HIGH hit rates because they have only 4-8 vertices. All points cluster around few positions, making "closeness" meaningless. Not valid test surfaces.
+
+### Summary
+
+The ~9% factor proximity effect is **statistically real** (p ≈ 0.005 for observing 11/121 hits at 5% null rate) but **mathematically trivial** — it emerges from latitude correlation, not from geometry encoding factorization information.
+
+### Actionability Criteria (Why This Isn't Useful for Factoring)
+
+Any claimed factorization signal must pass these tests:
+
+| Criterion | Question | Our Result |
+|-----------|----------|------------|
+| **Null-resistance** | Does it survive permutation + N-scaling + radius tests? | ⚠️ Partially (9% vs 5%) |
+| **Out-of-sample** | Does it work on new data without retuning? | ❌ No predictive power |
+| **Actionability** | Does it reduce search space by 2×, 10×, 100×? | ❌ No — 91% show no signal |
+
+**Verdict:** The effect is a geometric curiosity, not a factorization lever. Treat geometry as a **feature extractor for filters** (sieving), not as a factor oracle.
 
 ## Architecture
 
@@ -182,9 +242,7 @@ MIT License — use freely for research, education, or curiosity.
 ## Acknowledgments
 
 Built through collaborative exploration between human researcher and AI assistant, using:
-- ADEIS methodology (Attune, Derive, Execute, Inhabit, Ship)
-- APEX-EVE cognitive architecture
-- Kernel v4 coherent generation pipeline
+- ADEIS methodology (Attune, Derive, Execute, Inhabit, Ship) and some other methodologies
 
 The tool embodies the principle that **rigorous falsification is as valuable as discovery** — knowing what doesn't work is progress.
 
