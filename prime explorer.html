@@ -3333,8 +3333,10 @@
             if (point) return { x: point.x, y: point.y, z: point.z };
             
             // Calculate position if not in current range
-            const t = n / this.explorer.maxN;
-            const mapping = MappingStrategy.map(n, this.explorer.maxN, this.explorer.mappingMethod, PrimeMath.isPrime(n), this.explorer.mappingMode, this.explorer.surfaceType);
+            // Use n itself as the scale reference to keep t in valid range
+            const effectiveMax = Math.max(n, this.explorer.maxN);
+            const t = n / effectiveMax;
+            const mapping = MappingStrategy.map(n, effectiveMax, this.explorer.mappingMethod, PrimeMath.isPrime(n), this.explorer.mappingMode, this.explorer.surfaceType);
             return this.explorer.surface.mapPoint(t, mapping.theta, mapping.phi, PrimeMath.isPrime(n));
         }
         
@@ -3352,8 +3354,9 @@
             const factors = this.factor(n);
             const posN = this.getPosition(n);
             
-            // Get all primes up to sqrt(n) * 2 for relevance
-            const primeLimit = Math.min(Math.sqrt(n) * 2, this.explorer.maxN);
+            // Get all primes up to max(sqrt(n) * 2, largest_factor) to ensure both factors included
+            const maxFactor = factors.length > 0 ? Math.max(...factors) : 0;
+            const primeLimit = Math.min(Math.max(Math.sqrt(n) * 2, maxFactor), this.explorer.maxN);
             const primes = this.explorer.points.filter(p => p.isPrime && p.n <= primeLimit);
             
             // Compute distance to each prime
@@ -3372,8 +3375,8 @@
             spectrum.sort((a, b) => a.prime - b.prime);
             
             // Statistics
-            const factorDistances = spectrum.filter(s => s.isFactor).map(s => s.distance);
-            const nonFactorDistances = spectrum.filter(s => !s.isFactor).map(s => s.distance);
+            const factorDistances = spectrum.filter(s => s.isFactor && Number.isFinite(s.distance)).map(s => s.distance);
+            const nonFactorDistances = spectrum.filter(s => !s.isFactor && Number.isFinite(s.distance)).map(s => s.distance);
             
             const avgFactorDist = factorDistances.length > 0 
                 ? factorDistances.reduce((a, b) => a + b, 0) / factorDistances.length : 0;
@@ -3381,10 +3384,11 @@
                 ? nonFactorDistances.reduce((a, b) => a + b, 0) / nonFactorDistances.length : 0;
             
             // Find rank of factors among all distances
-            const sortedByDist = [...spectrum].sort((a, b) => a.distance - b.distance);
+            const validSpectrum = spectrum.filter(s => Number.isFinite(s.distance));
+            const sortedByDist = [...validSpectrum].sort((a, b) => a.distance - b.distance);
             const factorRanks = factors.map(f => {
                 const idx = sortedByDist.findIndex(s => s.prime === f);
-                return { factor: f, rank: idx + 1, percentile: ((idx + 1) / spectrum.length * 100).toFixed(1) };
+                return { factor: f, rank: idx + 1, percentile: ((idx + 1) / validSpectrum.length * 100).toFixed(1) };
             });
             
             return {
@@ -3395,7 +3399,7 @@
                     totalPrimes: spectrum.length,
                     avgFactorDist: avgFactorDist.toFixed(4),
                     avgNonFactorDist: avgNonFactorDist.toFixed(4),
-                    ratio: (avgFactorDist / avgNonFactorDist).toFixed(3),
+                    ratio: avgNonFactorDist > 0 ? (avgFactorDist / avgNonFactorDist).toFixed(3) : 'N/A',
                     factorRanks
                 }
             };
@@ -3408,12 +3412,42 @@
             
             const observedAvg = parseFloat(result.stats.avgFactorDist);
             const numFactors = result.factors.length;
-            const allDistances = result.spectrum.map(s => s.distance);
+            
+            // FIXED: Exclude actual factors from the pool of random candidates
+            const nonFactorDistances = result.spectrum
+                .filter(s => !s.isFactor)
+                .map(s => s.distance)
+                .filter(d => Number.isFinite(d));
+            
+            // Check how many factors are actually in the spectrum
+            const factorsInSpectrum = result.spectrum.filter(s => s.isFactor).length;
+            if (factorsInSpectrum < numFactors) {
+                return {
+                    n,
+                    factors: result.factors,
+                    observedAvgDist: observedAvg.toFixed(4),
+                    pValue: 'N/A',
+                    significant: false,
+                    interpretation: `⚠️ Only ${factorsInSpectrum}/${numFactors} factors in analysis range`
+                };
+            }
+            
+            // If we don't have enough non-factors to sample, can't run test
+            if (nonFactorDistances.length < numFactors) {
+                return {
+                    n,
+                    factors: result.factors,
+                    observedAvgDist: observedAvg.toFixed(4),
+                    pValue: 'N/A',
+                    significant: false,
+                    interpretation: '⚠️ Not enough non-factors to run permutation test'
+                };
+            }
             
             let countLessOrEqual = 0;
             for (let i = 0; i < iterations; i++) {
-                // Randomly pick numFactors distances
-                const shuffled = [...allDistances].sort(() => Math.random() - 0.5);
+                // Randomly pick numFactors distances FROM NON-FACTORS ONLY
+                const shuffled = [...nonFactorDistances].sort(() => Math.random() - 0.5);
                 const randomPick = shuffled.slice(0, numFactors);
                 const randomAvg = randomPick.reduce((a, b) => a + b, 0) / numFactors;
                 if (randomAvg <= observedAvg) countLessOrEqual++;
