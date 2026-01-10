@@ -939,6 +939,125 @@
                 </div>
             </div>
             
+            <!-- EC MODE — Elliptic Curve Analysis -->
+            <div class="section" style="border-color: rgba(80, 150, 255, 0.5); background: rgba(80, 150, 255, 0.08);">
+                <h3 onclick="toggleSection(this)" style="color: #5096ff;">🔷 Elliptic Curve Mode <span class="help-icon" title="Overlay elliptic curve data on primes.&#10;&#10;COLORS:&#10;🔴 Bad reduction (p | conductor)&#10;🔵 Supersingular (a_p = 0)&#10;🟡 Ordinary (a_p ≠ 0)&#10;⚫ Unknown (no data)&#10;&#10;USE FOR:&#10;• BSD conjecture visualization&#10;• Sha test candidates&#10;• Factor structure research">ⓘ</span></h3>
+                <div class="section-content">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <input type="checkbox" id="ecModeEnabled" style="width:16px;height:16px;">
+                        <label for="ecModeEnabled" style="font-size:0.7rem;font-weight:bold;">Enable EC Mode</label>
+                    </div>
+                    <div class="control">
+                        <label>Curve</label>
+                        <select id="ecCurveSelect">
+                            <option value="37a1">37a1 (rank 1)</option>
+                            <option value="389a1">389a1 (rank 2)</option>
+                            <option value="681b1">681b1 (Sha=9)</option>
+                            <option value="433a1">433a1 (rank 1)</option>
+                            <option value="5077a1">5077a1 (rank 3)</option>
+                            <option value="11a1">11a1 (torsion 5)</option>
+                        </select>
+                    </div>
+                    <div class="control">
+                        <label>Filter</label>
+                        <select id="ecFilterSelect">
+                            <option value="none">All primes</option>
+                            <option value="supersingular">Supersingular only</option>
+                            <option value="bad">Bad reduction only</option>
+                            <option value="shaTest">Sha test candidates</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:0.6rem;">
+                        <div style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#ff5050;"></span>Bad</div>
+                        <div style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#5096ff;"></span>SS</div>
+                        <div style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#ffdc50;"></span>Ord</div>
+                        <div style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#666;"></span>?</div>
+                    </div>
+                    <div class="btn-row" style="margin-top:8px;">
+                        <button class="btn" id="ecStatsBtn" style="background:rgba(80,150,255,0.2);border-color:rgba(80,150,255,0.5);color:#5096ff;">📊 Stats</button>
+                        <button class="btn" id="ecCompareBtn" style="background:rgba(80,150,255,0.2);border-color:rgba(80,150,255,0.5);color:#5096ff;">🔄 Compare</button>
+                    </div>
+                    <div id="ecInfoPanel" style="margin-top:8px;padding:8px;background:rgba(0,0,0,0.4);border-radius:4px;font-size:0.6rem;display:none;"></div>
+                </div>
+            </div>
+            
+            <!-- EC FRONTIER EXPERIMENT — Phase 3 -->
+            <div class="section" style="border-color: rgba(80, 150, 255, 0.5); background: rgba(80, 150, 255, 0.08);">
+                <h3 onclick="toggleSection(this)" style="color: #5096ff;">🔬 EC FRONTIER Experiment <span class="help-icon" title="Test EC properties for factor revelation.&#10;&#10;HYPOTHESIS:&#10;Does a_n correlate with a_p + a_q?&#10;Can group structure (ℤ/nℤ)* reveal p,q?&#10;&#10;Run experiment to test across curves.">ⓘ</span></h3>
+                <div class="section-content">
+                    <div class="test-row" style="display:flex;gap:4px;align-items:center;">
+                        <input type="number" id="frontierP" placeholder="p" min="2" style="width:60px;text-align:center;">
+                        <span style="color:#5096ff;font-weight:bold;">×</span>
+                        <input type="number" id="frontierQ" placeholder="q" min="2" style="width:60px;text-align:center;">
+                    </div>
+                    <div class="control" style="margin-top:8px;">
+                        <label>Sample Size</label>
+                        <select id="frontierSampleSize">
+                            <option value="50">50 pairs (fast)</option>
+                            <option value="100" selected>100 pairs</option>
+                            <option value="200">200 pairs (thorough)</option>
+                        </select>
+                    </div>
+                    <div class="btn-row" style="margin-top:8px;">
+                        <button class="btn" id="testSemiprimeECBtn" style="background:rgba(80,150,255,0.2);border-color:rgba(80,150,255,0.5);color:#5096ff;">Test Pair</button>
+                        <button class="btn" id="groupStructureBtn" style="background:rgba(80,150,255,0.2);border-color:rgba(80,150,255,0.5);color:#5096ff;">(ℤ/nℤ)*</button>
+                    </div>
+                    <button class="btn" id="runFrontierBtn" style="width:100%;margin-top:6px;font-weight:bold;background:rgba(80,150,255,0.2);border-color:rgba(80,150,255,0.5);color:#5096ff;">🔬 RUN FRONTIER EXPERIMENT</button>
+                    <div id="frontierResult" style="margin-top:8px;padding:8px;background:rgba(0,0,0,0.4);border-radius:4px;font-size:0.6rem;display:none;"></div>
+                </div>
+            </div>
+            
+            <!-- ORDER/GCD TELEMETRY — Pollard p-1 Explorer -->
+            <div class="section" style="border-color: rgba(255, 180, 50, 0.5); background: rgba(255, 180, 50, 0.08);">
+                <h3 onclick="toggleSection(this)" style="color: #ffb432;">🔑 Order/GCD Telemetry <span class="help-icon" title="Explore Pollard p-1 style factorization.&#10;&#10;THE IDEA:&#10;If (p-1) is smooth, then a^(k!) ≡ 1 (mod p)&#10;so gcd(a^(k!) - 1, n) reveals p.&#10;&#10;HEURISTICS:&#10;• Factorial: m = k!&#10;• Primorial: m = 2·3·5·7·...&#10;• LCM: m = lcm(1,2,...,k)&#10;&#10;EXPECTED:&#10;✓ Works on smooth p-1&#10;✗ Fails on RSA semiprimes&#10;&#10;This is exactly Pollard p-1 (1974).">ⓘ</span></h3>
+                <div class="section-content">
+                    <div style="font-size:0.65rem;color:#888;margin-bottom:6px;">
+                        Pollard p-1: gcd(a<sup>m</sup> - 1, n) where m accumulates primes
+                    </div>
+                    <div class="control">
+                        <label>Target n (composite)</label>
+                        <input type="number" id="orderTargetN" placeholder="e.g. 1073, 8051, 15347" style="width:100%;">
+                    </div>
+                    <div class="control" style="margin-top:6px;">
+                        <label>Heuristic for m</label>
+                        <select id="orderHeuristic" style="width:100%;padding:4px;background:#1a1a2e;color:#fff;border:1px solid #ffb432;border-radius:4px;">
+                            <option value="factorial">Factorial: m = k!</option>
+                            <option value="primorial">Primorial: m = p₁·p₂·...·pₖ</option>
+                            <option value="lcm">LCM: m = lcm(1..k)</option>
+                            <option value="powersmooth">Power-smooth: lcm of prime powers</option>
+                        </select>
+                    </div>
+                    <div class="control" style="margin-top:6px;">
+                        <label>Bound k: <span id="orderBoundValue">50</span></label>
+                        <input type="range" id="orderBound" min="10" max="500" value="50" step="10" style="width:100%;">
+                    </div>
+                    <div class="btn-row" style="margin-top:8px;">
+                        <button class="btn" id="runOrderAttackBtn" style="background:rgba(255,180,50,0.2);border-color:rgba(255,180,50,0.5);color:#ffb432;font-weight:bold;">▶ Run Attack</button>
+                        <button class="btn" id="stepOrderAttackBtn" style="background:rgba(255,180,50,0.2);border-color:rgba(255,180,50,0.5);color:#ffb432;">⏭ Step</button>
+                    </div>
+                    <div class="btn-row" style="margin-top:4px;">
+                        <button class="btn" id="randomSmoothBtn" style="background:rgba(0,255,136,0.15);border-color:rgba(0,255,136,0.4);color:#00ff88;">🎲 Smooth p-1</button>
+                        <button class="btn" id="randomHardBtn" style="background:rgba(255,107,107,0.15);border-color:rgba(255,107,107,0.4);color:#ff6b6b;">🎲 RSA-style</button>
+                    </div>
+                    <div id="orderProgress" style="margin-top:8px;display:none;">
+                        <div style="display:flex;justify-content:space-between;font-size:0.6rem;color:#888;">
+                            <span>k = <span id="orderCurrentK">0</span></span>
+                            <span>gcd checks: <span id="orderGcdChecks">0</span></span>
+                        </div>
+                        <div style="height:6px;background:#1a1a2e;border-radius:3px;margin-top:4px;overflow:hidden;">
+                            <div id="orderProgressBar" style="height:100%;background:linear-gradient(90deg,#ffb432,#ff6b6b);width:0%;transition:width 0.1s;"></div>
+                        </div>
+                    </div>
+                    <div id="orderResult" style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.4);border-radius:4px;font-size:0.65rem;display:none;">
+                        <div id="orderResultContent"></div>
+                    </div>
+                    <div id="orderHistory" style="margin-top:8px;max-height:120px;overflow-y:auto;font-size:0.6rem;display:none;">
+                        <div style="color:#888;margin-bottom:4px;">History:</div>
+                        <div id="orderHistoryContent"></div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- NEW: MULTIPLICATION LAB -->
             <div class="section frontier">
                 <h3 onclick="toggleSection(this)">🧪 Multiplication Lab <span class="help-icon" title="Interactive lab to test multiplication additivity hypothesis.&#10;&#10;THE QUESTION:&#10;Does Φ(p×q) ≈ Φ(p) + Φ(q) for some feature Φ?&#10;If yes, factoring would reduce to subtraction!&#10;&#10;HOW TO USE:&#10;1. Select a Feature Mode (position, angle, log, etc.)&#10;2. Enter two primes p and q&#10;3. Click 'Test Pair' to compare Φ(p×q) vs Φ(p)+Φ(q)&#10;4. 'Batch Test' runs many pairs for statistics&#10;5. 'Random Pair' picks random primes to test&#10;&#10;WHAT TO LOOK FOR:&#10;Low error ratio (< 0.1) would mean near-additive!&#10;(Spoiler: position-based features always have large errors)">ⓘ</span></h3>
@@ -3841,6 +3960,572 @@
     }
     
     // ═══════════════════════════════════════════════════════════════════════════════
+    // EC MODE CLASSES — Elliptic Curve Analysis for BSD + Factorization Research
+    // ═══════════════════════════════════════════════════════════════════════════════
+    class EllipticCurveData {
+        constructor(label, conductor, rank, sha, torsion, a_p_data) {
+            this.label = label;
+            this.conductor = conductor;
+            this.rank = rank;
+            this.sha = sha;
+            this.torsion = torsion;
+            this.a_p = new Map(Object.entries(a_p_data).map(([k, v]) => [parseInt(k), v]));
+        }
+        
+        reductionType(p) {
+            if (this.conductor % p === 0) return 'bad';
+            const ap = this.a_p.get(p);
+            if (ap === undefined) return 'unknown';
+            if (ap === 0) return 'supersingular';
+            return 'ordinary';
+        }
+        
+        getColor(p) {
+            switch (this.reductionType(p)) {
+                case 'bad': return { r: 255, g: 80, b: 80 };
+                case 'supersingular': return { r: 80, g: 150, b: 255 };
+                case 'ordinary': return { r: 255, g: 220, b: 80 };
+                case 'unknown': return { r: 100, g: 100, b: 100 };
+                default: return { r: 128, g: 128, b: 128 };
+            }
+        }
+        
+        isShaTestCandidate(p) {
+            if (!this.sha || this.sha === 1) return false;
+            if (this.sha % p !== 0) return false;
+            return this.reductionType(p) === 'supersingular';
+        }
+        
+        getSupersingularPrimes(limit = 1000) {
+            const ss = [];
+            for (const [p, ap] of this.a_p) {
+                if (p <= limit && ap === 0 && this.conductor % p !== 0) ss.push(p);
+            }
+            return ss.sort((a, b) => a - b);
+        }
+        
+        getBadPrimes() {
+            const bad = [];
+            let n = this.conductor;
+            for (let p = 2; p * p <= n; p++) {
+                if (n % p === 0) { bad.push(p); while (n % p === 0) n /= p; }
+            }
+            if (n > 1) bad.push(n);
+            return bad;
+        }
+    }
+
+    const CURVE_DATABASE = {
+        "37a1": new EllipticCurveData("37a1", 37, 1, 1, 1, {
+            2: -2, 3: -3, 5: -2, 7: -2, 11: -2, 13: 6, 17: 0, 19: 0,
+            23: -4, 29: 2, 31: 8, 41: -10, 43: 2, 47: 8, 53: -6, 59: -4,
+            61: -4, 67: -10, 71: -4, 73: -6, 79: -12, 83: -6, 89: 8, 97: -12,
+            101: -2, 103: 16, 107: 4, 109: 2, 113: -6, 127: 8, 131: -10,
+            137: -6, 139: 8, 149: 2, 151: -4, 157: -10, 163: -2, 167: 12,
+            173: 2, 179: 8, 181: -10, 191: 0, 193: 2, 197: 2, 199: -16
+        }),
+        "389a1": new EllipticCurveData("389a1", 389, 2, 1, 1, {
+            2: -2, 3: -3, 5: -3, 7: -5, 11: -5, 13: 2, 17: 0, 19: -1,
+            23: 4, 29: -6, 31: -4, 37: 3, 41: 9, 43: -6, 47: -7,
+            53: -6, 59: 5, 61: 12, 67: -7, 71: -1, 73: -4, 79: 5,
+            83: -6, 89: 10, 97: -1, 101: 5, 103: -13, 107: 0, 109: -4,
+            113: 3, 127: -16, 131: 15, 137: 6, 139: -4, 149: -6, 151: -13,
+            157: -4, 163: -10, 167: 0, 173: 18, 179: 0, 181: -4, 191: -7
+        }),
+        "681b1": new EllipticCurveData("681b1", 681, 0, 9, 1, {
+            2: -1, 5: -3, 7: 0, 11: -2, 13: 6, 17: -2, 19: -4, 23: 0,
+            29: 2, 31: 4, 37: -6, 41: 2, 43: -2, 47: 8, 53: 6, 59: 4,
+            61: -10, 67: -2, 71: -8, 73: 6, 79: 8, 83: -6, 89: -10,
+            97: -6, 101: -2, 103: 16, 107: 4, 109: 2, 113: 14, 127: -8,
+            131: 4, 137: 6, 139: -8, 149: -6, 151: -4, 157: 2, 163: 4
+        }),
+        "433a1": new EllipticCurveData("433a1", 433, 1, 1, 1, {
+            2: -1, 3: 0, 5: 1, 7: -3, 11: 4, 13: -1, 17: 6, 19: 0,
+            23: 0, 29: -6, 31: -4, 37: 2, 41: -6, 43: 8, 47: 0,
+            53: 6, 59: -4, 61: -10, 67: 8, 71: 0, 73: -10, 79: 8,
+            83: -6, 89: 10, 97: -14, 101: 2, 103: 0, 107: 12, 109: -10
+        }),
+        "5077a1": new EllipticCurveData("5077a1", 5077, 3, 1, 1, {
+            2: 1, 3: -1, 5: -1, 7: -3, 11: -4, 13: 2, 17: 0, 19: 4,
+            23: 4, 29: 2, 31: -4, 37: -6, 41: 6, 43: 8, 47: -8,
+            53: -6, 59: 4, 61: 2, 67: -4, 71: 0, 73: -6, 79: 0,
+            83: 4, 89: -6, 97: 2, 101: 6, 103: 8, 107: 4, 109: -10
+        }),
+        "11a1": new EllipticCurveData("11a1", 11, 0, 1, 5, {
+            2: -2, 3: -1, 5: 1, 7: -2, 13: 4, 17: -2, 19: 0, 23: -1,
+            29: 0, 31: 7, 37: 3, 41: -8, 43: -6, 47: 8, 53: -6, 59: 5,
+            61: 12, 67: -7, 71: -3, 73: 4, 79: -10, 83: -6, 89: 10,
+            97: -7, 101: 2, 103: 17, 107: 0, 109: 2, 113: 6, 127: -13
+        })
+    };
+
+    class ECModeAnalyzer {
+        constructor(explorer) {
+            this.explorer = explorer;
+            this.enabled = false;
+            this.currentCurve = null;
+            this.filter = 'none';
+        }
+        
+        setCurve(label) {
+            this.currentCurve = CURVE_DATABASE[label] || null;
+            return this.currentCurve;
+        }
+        
+        getColor(p) {
+            if (!this.enabled || !this.currentCurve) return null;
+            if (!PrimeMath.isPrime(p)) return null;
+            return this.currentCurve.getColor(p);
+        }
+        
+        shouldShow(n) {
+            if (!this.enabled || !this.currentCurve) return true;
+            if (!PrimeMath.isPrime(n)) return true;
+            switch (this.filter) {
+                case 'supersingular': return this.currentCurve.reductionType(n) === 'supersingular';
+                case 'bad': return this.currentCurve.reductionType(n) === 'bad';
+                case 'shaTest': return this.currentCurve.isShaTestCandidate(n);
+                default: return true;
+            }
+        }
+        
+        getStatistics(maxN) {
+            if (!this.currentCurve) return null;
+            const stats = {
+                curve: this.currentCurve.label,
+                conductor: this.currentCurve.conductor,
+                rank: this.currentCurve.rank,
+                sha: this.currentCurve.sha,
+                torsion: this.currentCurve.torsion,
+                badPrimes: this.currentCurve.getBadPrimes(),
+                supersingular: [], ordinary: [], shaTestCandidates: []
+            };
+            for (let p = 2; p <= maxN; p++) {
+                if (!PrimeMath.isPrime(p)) continue;
+                const type = this.currentCurve.reductionType(p);
+                if (type === 'supersingular') stats.supersingular.push(p);
+                else if (type === 'ordinary') stats.ordinary.push(p);
+                if (this.currentCurve.isShaTestCandidate(p)) stats.shaTestCandidates.push(p);
+            }
+            return stats;
+        }
+        
+        compareCurves(labels, maxN) {
+            const curves = labels.map(l => CURVE_DATABASE[l]).filter(c => c);
+            if (curves.length < 2) return null;
+            const results = { curves: labels, commonSS: [], neverSS: [], distribution: {} };
+            for (let p = 2; p <= maxN; p++) {
+                if (!PrimeMath.isPrime(p)) continue;
+                const types = curves.map(c => c.reductionType(p));
+                if (types.every(t => t === 'supersingular')) results.commonSS.push(p);
+                if (types.every(t => t !== 'supersingular')) results.neverSS.push(p);
+            }
+            return results;
+        }
+        
+        getBSDInfo() {
+            if (!this.currentCurve) return '';
+            const c = this.currentCurve;
+            const badStr = c.getBadPrimes().join(', ') || 'none';
+            const ssCount = this.getStatistics(500)?.supersingular.length || 0;
+            let shaNote = '';
+            if (c.sha > 1) {
+                const shaPrimes = [];
+                for (let p = 2; p * p <= c.sha; p++) if (c.sha % p === 0) shaPrimes.push(p);
+                if (c.sha > 1 && PrimeMath.isPrime(c.sha)) shaPrimes.push(c.sha);
+                const badSet = new Set(c.getBadPrimes());
+                const shaTestable = shaPrimes.filter(p => !badSet.has(p) && c.reductionType(p) === 'supersingular');
+                shaNote = shaTestable.length === 0
+                    ? `<div style="color:#ff6b6b;margin-top:4px;">⚠️ No Sha test cases: primes dividing Sha=${c.sha} have bad reduction!</div>`
+                    : `<div style="color:#00ff88;margin-top:4px;">✓ Sha test candidates: ${shaTestable.join(', ')}</div>`;
+            }
+            return `<div><strong>Curve:</strong> ${c.label}</div>
+                <div><strong>Conductor:</strong> ${c.conductor}</div>
+                <div><strong>Rank:</strong> ${c.rank}</div>
+                <div><strong>Sha:</strong> ${c.sha || '?'}</div>
+                <div><strong>Torsion:</strong> ℤ/${c.torsion}ℤ</div>
+                <hr style="border-color:#333;margin:6px 0;">
+                <div><strong>Bad primes:</strong> <span style="color:#ff6b6b;">${badStr}</span></div>
+                <div><strong>Supersingular (p<500):</strong> <span style="color:#80a0ff;">${ssCount}</span></div>
+                ${shaNote}`;
+        }
+    }
+
+    class SemiprimeECAnalyzer {
+        constructor(explorer) { this.explorer = explorer; this.results = []; }
+        
+        computeA_n(curve, n, p, q) {
+            const a_p = curve.a_p.get(p), a_q = curve.a_p.get(q);
+            if (a_p === undefined || a_q === undefined) return { a_n: null, method: 'missing_data' };
+            const E_p = p + 1 - a_p, E_q = q + 1 - a_q, E_n = E_p * E_q, a_n = n + 1 - E_n;
+            return { a_n, a_p, a_q, E_p, E_q, E_n, method: 'crt' };
+        }
+        
+        testAdditivity(curve, n, p, q) {
+            const result = this.computeA_n(curve, n, p, q);
+            if (result.a_n === null) return { error: 'missing_data', n, p, q, curve: curve.label };
+            const sum = result.a_p + result.a_q, product = result.a_p * result.a_q;
+            const errorSum = Math.abs(result.a_n - sum), errorProduct = Math.abs(result.a_n - product);
+            const scale = Math.max(Math.abs(result.a_n), 1);
+            return { n, p, q, curve: curve.label, a_p: result.a_p, a_q: result.a_q, a_n: result.a_n,
+                sum, product, errorSum, errorProduct, relErrorSum: errorSum / scale, relErrorProduct: errorProduct / scale,
+                betterModel: errorSum / scale < errorProduct / scale ? 'additive' : 'multiplicative' };
+        }
+        
+        batchTest(curve, maxPrime = 100, sampleSize = 50) {
+            const primes = [];
+            for (let i = 2; i <= maxPrime; i++) if (PrimeMath.isPrime(i) && curve.a_p.has(i)) primes.push(i);
+            const results = [], tested = new Set();
+            for (let i = 0; i < Math.min(sampleSize, primes.length * primes.length); i++) {
+                const p = primes[Math.floor(Math.random() * primes.length)];
+                const q = primes[Math.floor(Math.random() * primes.length)];
+                const key = `${Math.min(p,q)}_${Math.max(p,q)}`;
+                if (tested.has(key)) continue;
+                tested.add(key);
+                const result = this.testAdditivity(curve, p * q, p, q);
+                if (!result.error) results.push(result);
+            }
+            this.results = results;
+            return this.analyzeResults(results);
+        }
+        
+        analyzeResults(results) {
+            if (results.length === 0) return null;
+            const avgErrorSum = results.reduce((s, r) => s + r.relErrorSum, 0) / results.length;
+            const avgErrorProduct = results.reduce((s, r) => s + r.relErrorProduct, 0) / results.length;
+            const additiveWins = results.filter(r => r.betterModel === 'additive').length;
+            // FIX: Use relative error to avoid scaling artifact from Hasse bound
+            const sums = results.map(r => r.p + r.q), errors = results.map(r => r.relErrorSum);
+            const correlation = this.pearsonCorrelation(sums, errors);
+            return { sampleSize: results.length, avgRelErrorSum: avgErrorSum.toFixed(4), avgRelErrorProduct: avgErrorProduct.toFixed(4),
+                additiveWins, multiplicativeWins: results.length - additiveWins,
+                dominantModel: additiveWins > results.length - additiveWins ? 'ADDITIVE' : 'MULTIPLICATIVE',
+                correlationWithSum: correlation.toFixed(4),
+                interpretation: Math.abs(correlation) > 0.3 ? '⚠️ Correlation with p+q — investigate!' : '❌ No correlation — EC properties don\'t reveal p+q' };
+        }
+        
+        pearsonCorrelation(x, y) {
+            const n = x.length; if (n === 0) return 0;
+            const sumX = x.reduce((a, b) => a + b, 0), sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((acc, xi, i) => acc + xi * y[i], 0);
+            const sumX2 = x.reduce((a, b) => a + b * b, 0), sumY2 = y.reduce((a, b) => a + b * b, 0);
+            const num = n * sumXY - sumX * sumY, den = Math.sqrt((n * sumX2 - sumX ** 2) * (n * sumY2 - sumY ** 2));
+            return den === 0 ? 0 : num / den;
+        }
+        
+        findRevealingCurves(n, p, q) {
+            const revealing = [];
+            for (const label of Object.keys(CURVE_DATABASE)) {
+                const curve = CURVE_DATABASE[label];
+                const result = this.testAdditivity(curve, n, p, q);
+                if (result.error) continue;
+                if (result.relErrorSum < 0.1 || result.relErrorProduct < 0.1) {
+                    revealing.push({ curve: label, relErrorSum: result.relErrorSum, relErrorProduct: result.relErrorProduct, a_n: result.a_n, a_p: result.a_p, a_q: result.a_q });
+                }
+            }
+            return revealing.sort((a, b) => a.relErrorSum - b.relErrorSum);
+        }
+    }
+
+    class GroupStructureAnalyzer {
+        constructor(explorer) { this.explorer = explorer; this.orderCache = new Map(); }
+        gcd(a, b) { while (b !== 0) [a, b] = [b, a % b]; return a; }
+        lcm(a, b) { return (a * b) / this.gcd(a, b); }
+        phi(n) { let result = n; for (let p = 2; p * p <= n; p++) { if (n % p === 0) { while (n % p === 0) n /= p; result -= result / p; } } if (n > 1) result -= result / n; return result; }
+        multiplicativeOrder(x, n) {
+            if (this.gcd(x, n) !== 1) return -1;
+            const key = `${x}_${n}`; if (this.orderCache.has(key)) return this.orderCache.get(key);
+            const phiN = this.phi(n); let order = 1, power = x % n;
+            while (power !== 1 && order <= phiN) { power = (power * x) % n; order++; }
+            this.orderCache.set(key, order); return order;
+        }
+        detectProductStructure(n) {
+            const factors = PrimeMath.factorize(n);
+            if (factors.length !== 2) return { error: 'Not a semiprime' };
+            const p = factors[0], q = factors[1];
+            const analysis = { n, p, q, phiP: p - 1, phiQ: q - 1, phiN: (p - 1) * (q - 1), elements: [] };
+            for (let x = 2; x < Math.min(n, 100); x++) {
+                if (this.gcd(x, n) !== 1) continue;
+                const ordN = this.multiplicativeOrder(x, n), ordP = this.multiplicativeOrder(x % p, p), ordQ = this.multiplicativeOrder(x % q, q);
+                analysis.elements.push({ x, ordN, ordP, ordQ, lcmCheck: this.lcm(ordP, ordQ) === ordN });
+            }
+            const orders = analysis.elements.map(e => e.ordN), uniqueOrders = [...new Set(orders)];
+            let commonDivisor = uniqueOrders[0];
+            for (const o of uniqueOrders) commonDivisor = this.gcd(commonDivisor, o);
+            analysis.commonDivisor = commonDivisor;
+            analysis.structureVisible = commonDivisor > 1 && ((p - 1) % commonDivisor === 0 || (q - 1) % commonDivisor === 0);
+            return analysis;
+        }
+    }
+
+    class FRONTIERExperiment {
+        constructor(explorer) {
+            this.explorer = explorer;
+            this.semiprimeEC = new SemiprimeECAnalyzer(explorer);
+            this.groupAnalyzer = new GroupStructureAnalyzer(explorer);
+        }
+        
+        runFullExperiment(sampleSize = 100) {
+            console.log('🔬 FRONTIER Experiment: EC properties vs factor structure');
+            const results = { timestamp: new Date().toISOString(), hypothesis: 'Do EC properties over ℤ/nℤ reveal factor structure?', tests: {} };
+            console.log('  Test 1: EC additivity across curves...');
+            results.tests.ecAdditivity = {};
+            for (const label of Object.keys(CURVE_DATABASE)) {
+                results.tests.ecAdditivity[label] = this.semiprimeEC.batchTest(CURVE_DATABASE[label], 100, sampleSize);
+            }
+            console.log('  Test 2: Cross-curve revealing analysis...');
+            const testSemiprimes = this.generateTestSemiprimes(20);
+            const revealingCounts = {};
+            for (const {n, p, q} of testSemiprimes) {
+                for (const r of this.semiprimeEC.findRevealingCurves(n, p, q)) {
+                    revealingCounts[r.curve] = (revealingCounts[r.curve] || 0) + 1;
+                }
+            }
+            results.tests.revealingCurves = { testedSemiprimes: testSemiprimes.length, curveHits: revealingCounts,
+                bestCurve: Object.entries(revealingCounts).sort((a, b) => b[1] - a[1])[0] || ['none', 0] };
+            console.log('  Test 3: (ℤ/nℤ)* structure visibility...');
+            const groupResults = [];
+            for (const {n, p, q} of testSemiprimes.slice(0, 10)) {
+                const detection = this.groupAnalyzer.detectProductStructure(n);
+                groupResults.push({ n, p, q, structureVisible: detection.structureVisible, commonDivisor: detection.commonDivisor });
+            }
+            results.tests.groupStructure = { tested: groupResults.length, visibleCount: groupResults.filter(r => r.structureVisible).length, results: groupResults };
+            const ecSignal = Object.values(results.tests.ecAdditivity).some(a => a && Math.abs(parseFloat(a.correlationWithSum)) > 0.5);
+            const groupSignal = results.tests.groupStructure.visibleCount > 0;
+            results.verdict = { ecCorrelation: ecSignal ? 'SIGNAL DETECTED' : 'NO SIGNAL', groupStructure: groupSignal ? 'PARTIAL VISIBILITY' : 'HIDDEN',
+                conclusion: (ecSignal || groupSignal) ? '⚠️ POTENTIAL SIGNAL — warrants deeper investigation!' : '❌ NULL — EC domain confirms OBSTRUCT finding' };
+            console.log('✅ FRONTIER Experiment complete:', results.verdict.conclusion);
+            return results;
+        }
+        
+        generateTestSemiprimes(count) {
+            const primes = []; for (let i = 2; i <= 200; i++) if (PrimeMath.isPrime(i)) primes.push(i);
+            const semiprimes = [], seen = new Set();
+            while (semiprimes.length < count && semiprimes.length < primes.length * primes.length) {
+                const p = primes[Math.floor(Math.random() * Math.min(primes.length, 20))];
+                const q = primes[Math.floor(Math.random() * Math.min(primes.length, 20))];
+                const n = p * q;
+                if (!seen.has(n)) { seen.add(n); semiprimes.push({ n, p: Math.min(p, q), q: Math.max(p, q) }); }
+            }
+            return semiprimes;
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // CLASS: OrderGCDTelemetry — Pollard p-1 style exploration
+    // ═══════════════════════════════════════════════════════════════════════════════
+    class OrderGCDTelemetry {
+        constructor() {
+            this.history = [];
+            this.currentRun = null;
+            this.stepMode = false;
+            this.currentK = 0;
+            this.currentA = 2n;
+            this.primes = this._sievePrimes(1000);
+        }
+        
+        _sievePrimes(limit) {
+            const sieve = new Array(limit + 1).fill(true);
+            sieve[0] = sieve[1] = false;
+            for (let i = 2; i * i <= limit; i++) {
+                if (sieve[i]) for (let j = i * i; j <= limit; j += i) sieve[j] = false;
+            }
+            return sieve.map((v, i) => v ? i : 0).filter(x => x > 0);
+        }
+        
+        gcd(a, b) {
+            a = a < 0n ? -a : a;
+            b = b < 0n ? -b : b;
+            while (b > 0n) { const t = b; b = a % b; a = t; }
+            return a;
+        }
+        
+        modPow(base, exp, mod) {
+            let result = 1n;
+            base = base % mod;
+            while (exp > 0n) {
+                if (exp % 2n === 1n) result = (result * base) % mod;
+                exp = exp / 2n;
+                base = (base * base) % mod;
+            }
+            return result;
+        }
+        
+        // Get exponent for step k based on heuristic
+        getExponent(k, heuristic) {
+            switch (heuristic) {
+                case 'factorial': return BigInt(k);
+                case 'primorial': return k <= this.primes.length ? BigInt(this.primes[k - 1]) : BigInt(k);
+                case 'lcm': return BigInt(k);
+                case 'powersmooth': {
+                    // For power-smooth, use prime powers up to bound
+                    const p = k <= this.primes.length ? this.primes[k - 1] : k;
+                    let power = p;
+                    while (power * p <= 500) power *= p;
+                    return BigInt(power);
+                }
+                default: return BigInt(k);
+            }
+        }
+        
+        // Run full attack
+        runAttack(n, bound, heuristic) {
+            const nBig = BigInt(n);
+            const startTime = performance.now();
+            let a = 2n;
+            let gcdChecks = 0;
+            
+            for (let k = 2; k <= bound; k++) {
+                const exp = this.getExponent(k, heuristic);
+                a = this.modPow(a, exp, nBig);
+                gcdChecks++;
+                
+                const g = this.gcd(a - 1n, nBig);
+                if (g > 1n && g < nBig) {
+                    const elapsed = performance.now() - startTime;
+                    const result = {
+                        success: true,
+                        n: n,
+                        factor: Number(g),
+                        otherFactor: n / Number(g),
+                        foundAtK: k,
+                        heuristic,
+                        gcdChecks,
+                        timeMs: elapsed.toFixed(2),
+                        smoothness: this._estimateSmoothness(Number(g) - 1)
+                    };
+                    this.history.unshift(result);
+                    if (this.history.length > 20) this.history.pop();
+                    return result;
+                }
+            }
+            
+            const elapsed = performance.now() - startTime;
+            const result = {
+                success: false,
+                n: n,
+                bound,
+                heuristic,
+                gcdChecks,
+                timeMs: elapsed.toFixed(2),
+                reason: `No factor found with bound ${bound}`
+            };
+            this.history.unshift(result);
+            if (this.history.length > 20) this.history.pop();
+            return result;
+        }
+        
+        // Initialize step mode
+        initStepMode(n, heuristic) {
+            this.currentRun = { n: BigInt(n), nNum: n, heuristic };
+            this.currentK = 1;
+            this.currentA = 2n;
+            this.stepMode = true;
+            return { k: 1, a: '2', gcd: '1', status: 'ready' };
+        }
+        
+        // Execute one step
+        step() {
+            if (!this.stepMode || !this.currentRun) return null;
+            
+            this.currentK++;
+            const exp = this.getExponent(this.currentK, this.currentRun.heuristic);
+            this.currentA = this.modPow(this.currentA, exp, this.currentRun.n);
+            
+            const g = this.gcd(this.currentA - 1n, this.currentRun.n);
+            
+            if (g > 1n && g < this.currentRun.n) {
+                this.stepMode = false;
+                const result = {
+                    success: true,
+                    n: this.currentRun.nNum,
+                    factor: Number(g),
+                    otherFactor: this.currentRun.nNum / Number(g),
+                    foundAtK: this.currentK,
+                    heuristic: this.currentRun.heuristic
+                };
+                this.history.unshift(result);
+                return { k: this.currentK, gcd: g.toString(), status: 'found', result };
+            }
+            
+            return { k: this.currentK, gcd: g.toString(), status: 'continue' };
+        }
+        
+        // Estimate smoothness of a number
+        _estimateSmoothness(n) {
+            if (n <= 1) return { bound: 0, factors: [] };
+            let temp = n;
+            let largestPrime = 1;
+            const factors = [];
+            
+            for (const p of this.primes) {
+                if (p * p > temp) break;
+                while (temp % p === 0) {
+                    factors.push(p);
+                    if (p > largestPrime) largestPrime = p;
+                    temp /= p;
+                }
+            }
+            if (temp > 1) {
+                factors.push(temp);
+                largestPrime = temp;
+            }
+            
+            return { bound: largestPrime, factors };
+        }
+        
+        // Generate test cases
+        generateSmoothSemiprime() {
+            // Find primes p where p-1 is B-smooth for small B
+            const smoothPrimes = [];
+            for (let p = 3; p < 10000; p += 2) {
+                if (!PrimeMath.isPrime(p)) continue;
+                const smooth = this._estimateSmoothness(p - 1);
+                if (smooth.bound <= 50) smoothPrimes.push({ p, smoothBound: smooth.bound });
+            }
+            
+            if (smoothPrimes.length < 2) return { n: 1073, p: 29, q: 37, note: 'fallback' };
+            
+            const p1 = smoothPrimes[Math.floor(Math.random() * smoothPrimes.length)];
+            const p2 = smoothPrimes[Math.floor(Math.random() * smoothPrimes.length)];
+            
+            return {
+                n: p1.p * p2.p,
+                p: Math.min(p1.p, p2.p),
+                q: Math.max(p1.p, p2.p),
+                pMinus1Smooth: p1.smoothBound,
+                qMinus1Smooth: p2.smoothBound,
+                note: `p-1 is ${p1.smoothBound}-smooth, q-1 is ${p2.smoothBound}-smooth`
+            };
+        }
+        
+        generateHardSemiprime() {
+            // Find primes p where p-1 has a large prime factor
+            const hardPrimes = [];
+            for (let p = 1000; p < 50000; p++) {
+                if (!PrimeMath.isPrime(p)) continue;
+                const smooth = this._estimateSmoothness(p - 1);
+                if (smooth.bound > 500) hardPrimes.push({ p, smoothBound: smooth.bound });
+                if (hardPrimes.length > 100) break;
+            }
+            
+            if (hardPrimes.length < 2) return { n: 8051, p: 83, q: 97, note: 'fallback' };
+            
+            const p1 = hardPrimes[Math.floor(Math.random() * hardPrimes.length)];
+            const p2 = hardPrimes[Math.floor(Math.random() * hardPrimes.length)];
+            
+            return {
+                n: p1.p * p2.p,
+                p: Math.min(p1.p, p2.p),
+                q: Math.max(p1.p, p2.p),
+                pMinus1Smooth: p1.smoothBound,
+                qMinus1Smooth: p2.smoothBound,
+                note: `p-1 has prime factor ${p1.smoothBound}, q-1 has prime factor ${p2.smoothBound}`
+            };
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════════
     // CLASS: PrimeExplorer — Main application controller
     // ═══════════════════════════════════════════════════════════════════════════════
     class PrimeExplorer {
@@ -3860,6 +4545,15 @@
             this.neighborhoodAnalyzer = new NeighborhoodAnalyzer(this);
             this.constraintVisualizer = new ConstraintVisualizer(this);
             this.errorVectorAnalyzer = new ErrorVectorAnalyzer(this);
+            
+            // EC MODE
+            this.ecMode = new ECModeAnalyzer(this);
+            this.frontierExp = new FRONTIERExperiment(this);
+            this.semiprimeEC = this.frontierExp.semiprimeEC;
+            this.groupAnalyzer = this.frontierExp.groupAnalyzer;
+            
+            // Order/GCD Telemetry
+            this.orderGCD = new OrderGCDTelemetry();
             
             this.points = [];
             this.surface = SurfaceFactory.create('sphere');
@@ -3922,6 +4616,12 @@
                 point.setPosition(pos.x, pos.y, pos.z);
                 point.setColor(ColorScheme.getColor(point, this.colorMode));
                 
+                // EC Mode color override for primes
+                if (this.ecMode && this.ecMode.enabled && point.isPrime) {
+                    const ecColor = this.ecMode.getColor(point.n);
+                    if (ecColor) point.setColor(ecColor);
+                }
+                
                 // Add ALL points - visibility filtering happens in render()
                 this.points.push(point);
             }
@@ -3953,6 +4653,11 @@
                 // Composite visibility (non-prime, non-semiprime)
                 else {
                     if (!this.showComposites) return false;
+                }
+                
+                // EC Mode filter
+                if (this.ecMode && this.ecMode.enabled) {
+                    if (!this.ecMode.shouldShow(p.n)) return false;
                 }
                 
                 // Helix divisibility filter
@@ -5639,6 +6344,265 @@
         originalRotateBtn.addEventListener('click', () => {
             document.getElementById('spinToggleBtn').classList.toggle('active', explorer.autoRotate);
         });
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // EC MODE EVENT HANDLERS
+    // ═══════════════════════════════════════════════════════════════════════════════
+    document.getElementById('ecModeEnabled').addEventListener('change', e => {
+        explorer.ecMode.enabled = e.target.checked;
+        if (e.target.checked) {
+            const curveLabel = document.getElementById('ecCurveSelect').value;
+            explorer.ecMode.setCurve(curveLabel);
+            document.getElementById('ecInfoPanel').style.display = 'block';
+            document.getElementById('ecInfoPanel').innerHTML = explorer.ecMode.getBSDInfo();
+            showToast(`EC Mode: ${curveLabel} loaded`, 'info');
+        } else {
+            document.getElementById('ecInfoPanel').style.display = 'none';
+        }
+        explorer.generatePoints();
+    });
+    
+    document.getElementById('ecCurveSelect').addEventListener('change', e => {
+        explorer.ecMode.setCurve(e.target.value);
+        if (explorer.ecMode.enabled) {
+            document.getElementById('ecInfoPanel').innerHTML = explorer.ecMode.getBSDInfo();
+            explorer.generatePoints();
+            showToast(`Loaded curve: ${e.target.value}`, 'success');
+        }
+    });
+    
+    document.getElementById('ecFilterSelect').addEventListener('change', e => {
+        explorer.ecMode.filter = e.target.value;
+        if (explorer.ecMode.enabled) {
+            showToast(`Filter: ${e.target.value}`, 'info');
+            // Force re-render to apply filter
+            explorer.generatePoints();
+        }
+    });
+    
+    document.getElementById('ecStatsBtn').addEventListener('click', () => {
+        if (!explorer.ecMode.enabled || !explorer.ecMode.currentCurve) { alert('Enable EC Mode first!'); return; }
+        const stats = explorer.ecMode.getStatistics(explorer.maxN);
+        let html = `<div style="color:#5096ff;font-weight:bold;">📊 ${stats.curve} Statistics</div>`;
+        html += `<div>Rank: ${stats.rank} | Sha: ${stats.sha}</div>`;
+        html += `<div>🔴 Bad: ${stats.badPrimes.join(', ')}</div>`;
+        html += `<div>🔵 Supersingular: ${stats.supersingular.length}</div>`;
+        html += `<div>🟡 Ordinary: ${stats.ordinary.length}</div>`;
+        if (stats.sha > 1) html += `<div style="color:${stats.shaTestCandidates.length > 0 ? '#00ff88' : '#ff6b6b'};">Sha tests: ${stats.shaTestCandidates.length > 0 ? stats.shaTestCandidates.join(', ') : 'None (bad reduction)'}</div>`;
+        document.getElementById('ecInfoPanel').innerHTML = html;
+        document.getElementById('ecInfoPanel').style.display = 'block';
+    });
+    
+    document.getElementById('ecCompareBtn').addEventListener('click', () => {
+        const result = explorer.ecMode.compareCurves(Object.keys(CURVE_DATABASE), Math.min(explorer.maxN, 200));
+        if (!result) return;
+        let html = `<div style="color:#5096ff;font-weight:bold;">🔄 Cross-Curve Comparison</div>`;
+        html += `<div>Common SS: ${result.commonSS.length > 0 ? result.commonSS.join(', ') : 'None'}</div>`;
+        html += `<div>Never SS: ${result.neverSS.slice(0, 15).join(', ')}...</div>`;
+        document.getElementById('ecInfoPanel').innerHTML = html;
+        document.getElementById('ecInfoPanel').style.display = 'block';
+    });
+    
+    // EC FRONTIER EXPERIMENT HANDLERS
+    document.getElementById('runFrontierBtn').addEventListener('click', () => {
+        const btn = document.getElementById('runFrontierBtn');
+        btn.textContent = '⏳ Running...'; btn.disabled = true;
+        setTimeout(() => {
+            const results = explorer.frontierExp.runFullExperiment(parseInt(document.getElementById('frontierSampleSize').value));
+            let html = `<div style="color:#00ff88;font-weight:bold;">🔬 FRONTIER RESULTS</div>`;
+            html += `<div style="font-size:0.5rem;">${results.timestamp}</div>`;
+            for (const [curve, analysis] of Object.entries(results.tests.ecAdditivity)) {
+                if (!analysis) continue;
+                html += `<div><span style="color:#4ecdc4;">${curve}:</span> r=${analysis.correlationWithSum}</div>`;
+            }
+            html += `<div style="margin-top:8px;padding:6px;background:rgba(${results.verdict.conclusion.includes('SIGNAL') ? '0,255,136' : '255,107,107'},0.2);border-radius:4px;text-align:center;font-weight:bold;">${results.verdict.conclusion}</div>`;
+            document.getElementById('frontierResult').innerHTML = html;
+            document.getElementById('frontierResult').style.display = 'block';
+            showToast(`FRONTIER: ${results.verdict.conclusion}`, results.verdict.conclusion.includes('SIGNAL') ? 'success' : 'info');
+            btn.textContent = '🔬 RUN FRONTIER EXPERIMENT'; btn.disabled = false;
+        }, 100);
+    });
+    
+    document.getElementById('testSemiprimeECBtn').addEventListener('click', () => {
+        const p = parseInt(document.getElementById('frontierP').value);
+        const q = parseInt(document.getElementById('frontierQ').value);
+        if (!p || !q || !PrimeMath.isPrime(p) || !PrimeMath.isPrime(q)) { alert('Enter two primes!'); return; }
+        const revealing = explorer.semiprimeEC.findRevealingCurves(p * q, p, q);
+        let html = `<div style="color:#00ff88;font-weight:bold;">${p * q} = ${p} × ${q}</div>`;
+        html += revealing.length === 0 ? `<div style="color:#ff6b6b;">No revealing curves</div>` :
+            revealing.map(r => `<div>${r.curve}: err=${r.relErrorSum.toFixed(4)}</div>`).join('');
+        document.getElementById('frontierResult').innerHTML = html;
+        document.getElementById('frontierResult').style.display = 'block';
+    });
+    
+    document.getElementById('groupStructureBtn').addEventListener('click', () => {
+        const p = parseInt(document.getElementById('frontierP').value);
+        const q = parseInt(document.getElementById('frontierQ').value);
+        if (!p || !q) { alert('Enter p and q!'); return; }
+        const analysis = explorer.groupAnalyzer.detectProductStructure(p * q);
+        let html = `<div style="color:#00ff88;font-weight:bold;">(ℤ/${p*q}ℤ)* Structure</div>`;
+        html += `<div>φ(n) = ${analysis.phiN} = ${analysis.phiP} × ${analysis.phiQ}</div>`;
+        html += `<div style="color:${analysis.structureVisible ? '#00ff88' : '#ff6b6b'};">${analysis.structureVisible ? '⚠️ PARTIALLY VISIBLE' : '✓ HIDDEN'}</div>`;
+        document.getElementById('frontierResult').innerHTML = html;
+        document.getElementById('frontierResult').style.display = 'block';
+    });
+    
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // ORDER/GCD TELEMETRY EVENT HANDLERS
+    // ═══════════════════════════════════════════════════════════════════════════════
+    document.getElementById('orderBound').addEventListener('input', e => {
+        document.getElementById('orderBoundValue').textContent = e.target.value;
+    });
+    
+    document.getElementById('runOrderAttackBtn').addEventListener('click', () => {
+        const n = parseInt(document.getElementById('orderTargetN').value);
+        if (!n || n < 4) { alert('Enter a composite number n ≥ 4'); return; }
+        if (PrimeMath.isPrime(n)) { alert(`${n} is prime! Enter a composite.`); return; }
+        
+        const bound = parseInt(document.getElementById('orderBound').value);
+        const heuristic = document.getElementById('orderHeuristic').value;
+        
+        document.getElementById('orderProgress').style.display = 'block';
+        document.getElementById('orderProgressBar').style.width = '0%';
+        
+        // Run with animation
+        const btn = document.getElementById('runOrderAttackBtn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Running...';
+        
+        setTimeout(() => {
+            const result = explorer.orderGCD.runAttack(n, bound, heuristic);
+            
+            document.getElementById('orderProgressBar').style.width = '100%';
+            
+            let html = '';
+            if (result.success) {
+                html = `<div style="color:#00ff88;font-weight:bold;">✅ FACTOR FOUND!</div>`;
+                html += `<div style="font-size:1.1rem;margin:6px 0;">${result.n} = <span style="color:#ffb432;">${result.factor}</span> × ${result.otherFactor}</div>`;
+                html += `<div>Found at k = ${result.foundAtK} (${result.heuristic})</div>`;
+                html += `<div>GCD checks: ${result.gcdChecks} | Time: ${result.timeMs}ms</div>`;
+                const smooth = result.smoothness;
+                html += `<div style="margin-top:6px;color:#888;">p-1 = ${result.factor - 1} is <span style="color:#00ff88;">${smooth.bound}-smooth</span></div>`;
+                showToast(`Factor found: ${result.factor}`, 'success');
+            } else {
+                html = `<div style="color:#ff6b6b;font-weight:bold;">❌ NO FACTOR FOUND</div>`;
+                html += `<div>${result.reason}</div>`;
+                html += `<div>GCD checks: ${result.gcdChecks} | Time: ${result.timeMs}ms</div>`;
+                html += `<div style="margin-top:6px;color:#888;">Try increasing bound or different heuristic</div>`;
+                showToast('No factor found', 'info');
+            }
+            
+            document.getElementById('orderResultContent').innerHTML = html;
+            document.getElementById('orderResult').style.display = 'block';
+            
+            // Update history
+            updateOrderHistory();
+            
+            btn.disabled = false;
+            btn.textContent = '▶ Run Attack';
+        }, 50);
+    });
+    
+    document.getElementById('stepOrderAttackBtn').addEventListener('click', () => {
+        const n = parseInt(document.getElementById('orderTargetN').value);
+        
+        if (!explorer.orderGCD.stepMode) {
+            // Initialize step mode
+            if (!n || n < 4) { alert('Enter a composite number n ≥ 4'); return; }
+            if (PrimeMath.isPrime(n)) { alert(`${n} is prime!`); return; }
+            
+            const heuristic = document.getElementById('orderHeuristic').value;
+            explorer.orderGCD.initStepMode(n, heuristic);
+            
+            document.getElementById('orderProgress').style.display = 'block';
+            document.getElementById('orderCurrentK').textContent = '1';
+            document.getElementById('orderGcdChecks').textContent = '0';
+            document.getElementById('orderProgressBar').style.width = '0%';
+            
+            document.getElementById('orderResultContent').innerHTML = `<div style="color:#ffb432;">Step mode initialized. Click ⏭ to advance.</div>`;
+            document.getElementById('orderResult').style.display = 'block';
+            
+            document.getElementById('stepOrderAttackBtn').textContent = '⏭ Step';
+            showToast('Step mode started', 'info');
+        } else {
+            // Execute one step
+            const stepResult = explorer.orderGCD.step();
+            if (!stepResult) return;
+            
+            const bound = parseInt(document.getElementById('orderBound').value);
+            const progress = (stepResult.k / bound) * 100;
+            
+            document.getElementById('orderCurrentK').textContent = stepResult.k;
+            document.getElementById('orderGcdChecks').textContent = stepResult.k - 1;
+            document.getElementById('orderProgressBar').style.width = Math.min(progress, 100) + '%';
+            
+            if (stepResult.status === 'found') {
+                const r = stepResult.result;
+                let html = `<div style="color:#00ff88;font-weight:bold;">✅ FACTOR FOUND!</div>`;
+                html += `<div style="font-size:1.1rem;">${r.n} = <span style="color:#ffb432;">${r.factor}</span> × ${r.otherFactor}</div>`;
+                html += `<div>Found at k = ${r.foundAtK}</div>`;
+                document.getElementById('orderResultContent').innerHTML = html;
+                
+                document.getElementById('stepOrderAttackBtn').textContent = '⏭ Step';
+                updateOrderHistory();
+                showToast(`Factor found at k=${r.foundAtK}!`, 'success');
+            } else {
+                document.getElementById('orderResultContent').innerHTML = 
+                    `<div>k = ${stepResult.k} | gcd = ${stepResult.gcd === '1' ? '<span style="color:#888;">1</span>' : `<span style="color:#ffb432;">${stepResult.gcd}</span>`}</div>`;
+                
+                if (stepResult.k >= bound) {
+                    explorer.orderGCD.stepMode = false;
+                    document.getElementById('orderResultContent').innerHTML += 
+                        `<div style="color:#ff6b6b;margin-top:6px;">Bound reached. No factor found.</div>`;
+                    showToast('Bound reached, no factor', 'info');
+                }
+            }
+        }
+    });
+    
+    document.getElementById('randomSmoothBtn').addEventListener('click', () => {
+        const test = explorer.orderGCD.generateSmoothSemiprime();
+        document.getElementById('orderTargetN').value = test.n;
+        
+        let html = `<div style="color:#00ff88;">🎲 Generated: ${test.n} = ${test.p} × ${test.q}</div>`;
+        html += `<div style="color:#888;font-size:0.55rem;">${test.note}</div>`;
+        html += `<div style="color:#00ff88;margin-top:4px;">This SHOULD be easy to factor!</div>`;
+        document.getElementById('orderResultContent').innerHTML = html;
+        document.getElementById('orderResult').style.display = 'block';
+        
+        explorer.orderGCD.stepMode = false;
+        showToast(`Smooth semiprime: ${test.n}`, 'success');
+    });
+    
+    document.getElementById('randomHardBtn').addEventListener('click', () => {
+        const test = explorer.orderGCD.generateHardSemiprime();
+        document.getElementById('orderTargetN').value = test.n;
+        
+        let html = `<div style="color:#ff6b6b;">🎲 Generated: ${test.n} = ${test.p} × ${test.q}</div>`;
+        html += `<div style="color:#888;font-size:0.55rem;">${test.note}</div>`;
+        html += `<div style="color:#ff6b6b;margin-top:4px;">This SHOULD resist the attack!</div>`;
+        document.getElementById('orderResultContent').innerHTML = html;
+        document.getElementById('orderResult').style.display = 'block';
+        
+        explorer.orderGCD.stepMode = false;
+        showToast(`Hard semiprime: ${test.n}`, 'info');
+    });
+    
+    function updateOrderHistory() {
+        const history = explorer.orderGCD.history;
+        if (history.length === 0) return;
+        
+        document.getElementById('orderHistory').style.display = 'block';
+        let html = '';
+        for (const h of history.slice(0, 10)) {
+            if (h.success) {
+                html += `<div style="color:#00ff88;padding:2px 0;border-bottom:1px solid #333;">✓ ${h.n} = ${h.factor}×${h.otherFactor} (k=${h.foundAtK}, ${h.heuristic})</div>`;
+            } else {
+                html += `<div style="color:#ff6b6b;padding:2px 0;border-bottom:1px solid #333;">✗ ${h.n} — failed (${h.heuristic}, bound=${h.bound})</div>`;
+            }
+        }
+        document.getElementById('orderHistoryContent').innerHTML = html;
     }
     </script>
 </body>
