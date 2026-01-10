@@ -1,16 +1,19 @@
 # 🔬 Prime Explorer Frontier
 
-**An interactive 3D laboratory for investigating geometric patterns in prime numbers.**
+**An interactive 3D laboratory for investigating geometric patterns in prime numbers, elliptic curve properties, and classical factorization methods.**
 
 ![Prime Explorer Screenshot](Isocahedron%20Soccer%20Ball%20Pattern.png)
 
 ## What Is This?
 
-Prime Explorer Frontier is a browser-based research tool that maps integers onto 3D surfaces to explore whether geometric visualizations can reveal hidden patterns in number theory. It began as a simple prime visualization and evolved into a comprehensive hypothesis-testing laboratory.
+Prime Explorer Frontier is a browser-based research tool that maps integers onto 3D surfaces to explore whether geometric visualizations can reveal hidden patterns in number theory. It began as a simple prime visualization and evolved into a comprehensive hypothesis-testing laboratory with elliptic curve analysis and classical factorization exploration.
 
-**Core Question:** Can geometric positioning reveal structure in prime distribution that could inform factorization?
+**Core Questions:**
+- Can geometric positioning reveal structure in prime distribution that could inform factorization?
+- Can elliptic curve invariants leak factor information?
+- Where exactly do classical methods succeed and fail?
 
-**Spoiler:** Our research suggests geometry cannot encode multiplicative structure in exploitable ways — but the tool proves this rigorously rather than assuming it.
+**Research Outcome:** Our systematic investigation established clear **negative results and structural boundaries** — geometry cannot encode multiplicative structure in exploitable ways, EC correlations reduce to scaling artifacts, and classical "partial inversion" collapses to known methods (Pollard p-1). The tool proves these rigorously rather than assuming them.
 
 ## Features
 
@@ -31,7 +34,7 @@ Control *how* values become coordinates:
 - Valuation 3D, SPF Bands, Log Helix, Smoothness
 - And more...
 
-### 🧪 Statistical Validation Suite
+### 🧪 Statistical Validation Suite (FRONTIER)
 Don't trust your eyes — test your hypotheses:
 - **Base Rate Correction** — Compare observed vs expected
 - **Permutation Testing** — 1000 label shuffles for p-values
@@ -39,12 +42,29 @@ Don't trust your eyes — test your hypotheses:
 - **Radius Sensitivity** — Is it robust to parameter changes?
 - **Cross-Mode Validation** — Test across all mapping modes
 
+### 🔷 Elliptic Curve Mode (NEW)
+BSD conjecture verification and EC property exploration:
+- **6 Preloaded Curves** — 37a1, 389a1, 681b1, 433a1, 5077a1, 11a1
+- **Reduction Type Coloring** — Bad (red), Supersingular (blue), Ordinary (yellow)
+- **Sha Test Candidate Filter** — Identify primes for BSD testing
+- **Cross-Curve Comparison** — Find common/divergent supersingular primes
+- **FRONTIER Experiment** — Test EC additivity hypothesis: does a_n correlate with a_p + a_q?
+
+### 🔑 Order/GCD Telemetry (NEW)
+Pollard p-1 style factorization explorer:
+- **4 Heuristics** — Factorial (k!), Primorial, LCM(1..k), Power-smooth
+- **Step Mode** — Watch gcd evolve step-by-step
+- **Test Case Generators** — Smooth p-1 (easy) vs RSA-style (hard)
+- **Attack History** — Track successes and failures
+- **Educational Value** — Viscerally understand why RSA works
+
 ### 🔍 Research Tools
 - **Resonance Spectrum** — Factor distance analysis
 - **Neighborhood Lens** — Local geometric structure
 - **Error Vector Explorer** — Test multiplicative additivity
 - **Multiplication Lab** — Interactive Φ(p×q) vs Φ(p)+Φ(q) testing
 - **Factor Finder** — Instant factorization with visualization
+- **Constraint Visualizer** — See how partial information shrinks search space
 
 ## Installation
 
@@ -73,6 +93,16 @@ Or just download the HTML file and double-click it.
    - Click "🔬 RUN FULL VALIDATION" in the Hypothesis Validator
    - Check the verdict: DISCOVERY / INCONCLUSIVE / NULL
 
+4. **Try EC Mode:**
+   - Enable "Elliptic Curve Mode"
+   - Select curve 681b1 (Sha=9)
+   - Filter by "Sha test candidates" → observe empty sphere
+   - Click "📊 Stats" to see the BSD verification message
+
+5. **Try Order/GCD:**
+   - Click "🎲 Smooth p-1" → "▶ Run Attack" → watch it succeed
+   - Click "🎲 RSA-style" → "▶ Run Attack" → watch it fail
+
 ## The Three-Stage Pipeline
 
 ```
@@ -90,15 +120,106 @@ n = 541 (the 100th prime)
 
 All modes except "native" compose with the method dropdown. Native mode bypasses it for geometry-optimal mapping.
 
-## Recommended Configurations
+## Research Findings
 
-| Goal | Surface | Mode | Method |
-|------|---------|------|--------|
-| See divisibility structure | Torus | generic | CRT Residue (210×143) |
-| Factor-based bands | Sphere | generic | SPF Bands |
-| Direct factorization encoding | Sphere | generic | Valuation 3D |
-| Prime sequence patterns | Sphere | primeIndex | spiral |
-| Smooth number clustering | Sphere | generic | Smoothness |
+Our investigation established several key results:
+
+### Negative Results (Factorization)
+
+| Approach | Result | Why |
+|----------|--------|-----|
+| Geometric embeddings | ❌ NULL | Linear mapping cannot capture non-linear multiplication |
+| Digit/base transforms | ❌ NULL | Representational, not structural |
+| EC correlation (a_n vs a_p+a_q) | ❌ NULL | Initial signal was scaling artifact (Hasse bound) |
+| (ℤ/nℤ)* visualization | ❌ NULL | Product structure algebraically present but computationally hidden |
+| "Partial inversion" | → Pollard p-1 | Reduces to known order/smoothness methods |
+
+### Positive Results (BSD Verification)
+
+| Feature | Contribution |
+|---------|--------------|
+| Reduction type visualization | Correct bad/ordinary/supersingular coloring |
+| Sha test candidate identification | Precise filter with proper 3-condition logic |
+| 681b1 case verification | Visual proof that p=3 has bad reduction → no Sha test cases |
+| "+1" structural insight | Confirms normalization origin, not Sha leakage |
+
+### The Factor Proximity Effect
+
+We tested whether prime factors of semiprimes are geometrically closer to the product's position:
+
+| Surface | Hit Rate | Expected | Verdict |
+|---------|----------|----------|---------|
+| Sphere | 9.1% | 5% | Weak effect |
+| Torus | 8.3% | 5% | Weak effect |
+| **Helix** | **2.0%** | 5% | **No effect** |
+
+**Key Insight:** The effect is caused by **latitude correlation**, not factor encoding. Surfaces with latitude (Sphere, Torus, Cylinder) show it; the Helix (pure linear position) eliminates it entirely.
+
+**Why it's not exploitable:**
+- Only ~9% of semiprimes show the effect
+- Cannot predict which ones
+- Effect only confirms factors you already know
+
+### Structural Boundaries Identified
+
+| Boundary | Interpretation |
+|----------|----------------|
+| Geometry cannot reveal hidden multiplicative structure | Product structure is information-theoretically obscured |
+| Digit/base changes add no new arithmetic content | Representational, not structural |
+| Classical "partial inversion" collapses to order/smoothness | No new lever beyond known algorithms |
+| Visualization is diagnostic, not generative | Excellent for falsification, not extraction |
+| EC data does not leak factor information | Consistent with cryptographic expectations |
+
+## EC Mode: BSD Verification
+
+The EC Mode overlay colors primes by their reduction type for a given elliptic curve:
+
+```
+🔴 Bad reduction      — p divides conductor
+🔵 Supersingular      — a_p = 0 (good reduction)
+🟡 Ordinary           — a_p ≠ 0 (good reduction)
+⚫ Unknown            — no data available
+```
+
+### Sha Test Candidate Logic
+
+A prime p is a Sha test candidate if ALL THREE conditions hold:
+1. `p | Sha` — p divides the Shafarevich-Tate group order
+2. `p ∤ conductor` — good reduction at p
+3. `a_p = 0` — supersingular at p
+
+**681b1 Example (Sha = 9):**
+- Only p=3 divides Sha=9
+- But 3 | 681 (conductor) → bad reduction
+- **Result:** No Sha test candidates exist
+- **Implication:** The "+1" in BSD formulas is structural (Frobenius normalization)
+
+## Order/GCD Telemetry: Pollard p-1 Explorer
+
+This panel lets you **see** why Pollard p-1 works on some numbers and fails on others:
+
+### The Algorithm
+```
+a = 2
+for k = 2 to bound:
+    a = a^(exponent(k)) mod n
+    g = gcd(a - 1, n)
+    if 1 < g < n: return g  // Factor found!
+```
+
+### Heuristics for exponent(k)
+| Heuristic | Exponent | Best For |
+|-----------|----------|----------|
+| Factorial | k | General smooth p-1 |
+| Primorial | p_k (k-th prime) | Squarefree p-1 |
+| LCM | lcm(1..k) | Theoretically optimal |
+| Power-smooth | prime powers ≤ bound | Highly composite p-1 |
+
+### Expected Results
+- **Smooth p-1 semiprimes:** Factor found quickly (k < 100)
+- **RSA-style semiprimes:** No factor found (would need k ≈ largest prime factor of p-1)
+
+This formally closes the "partial inversion" intuition: it's Pollard p-1 (1974), and it works exactly as theory predicts.
 
 ## Validation Verdicts
 
@@ -109,84 +230,16 @@ All modes except "native" compose with the method dropdown. Native mode bypasses
 | 🔍 **WEAK** | Single test passed — likely artifact |
 | ❌ **NULL** | No effect detected — hypothesis falsified |
 
-## Research Findings
+## Recommended Configurations
 
-Our investigation established several key results:
-
-### 1. Geometry Cannot Encode Multiplicative Structure
-The mapping from n → position is inherently linear, while multiplication is non-linear. No geometric arrangement can make p × q predictable from positions of p and q.
-
-### 2. Visual "Clustering" is Usually Density Artifact
-Composites appear to cluster simply because there are more of them (~88% vs ~12% primes). Statistical tests distinguish real patterns from base-rate effects.
-
-### 3. DoubleHelix Separation is By Design
-The apparent prime/composite separation on double helix is built into the geometry, not a discovered pattern.
-
-### 4. CRT Mappings Reveal Divisibility, Not Factorization
-Numbers sharing residues cluster, but this doesn't help factor unknown numbers.
-
-### 5. Factor Proximity Effect: Real but Weak and Geometry-Dependent
-
-We conducted an extensive empirical study testing whether prime factors of semiprimes are geometrically closer to the semiprime's position than random primes. Results from 500+ random semiprime tests:
-
-#### Hit Rate by Surface (p < 0.05)
-
-| Surface | Clicks | Hits | Rate | Expected |
-|---------|--------|------|------|----------|
-| Sphere | 121 | 11 | 9.1% | 5% |
-| Torus | 132 | 11 | 8.3% | 5% |
-| Cylinder | 100 | 9 | 9.0% | 5% |
-| **Helix** | 100 | 2 | **2.0%** | 5% |
-
-#### Effect Strength When Significant
-
-| Surface | Avg Ratio | Factors Are... |
-|---------|-----------|----------------|
-| **Torus** | 0.43 | **57% closer** than random |
-| **Cylinder** | 0.69 | **31% closer** than random |
-| Sphere | 0.90 | 10% closer than random |
-| Helix | 1.00 | No closer (no effect) |
-
-```
-Effect Strength:
-Torus    ████████████████████ 57% closer
-Cylinder ██████████████       31% closer
-Sphere   █████                10% closer
-Helix    ▏                     0% closer
-```
-
-#### Key Insight: Latitude Correlation
-
-The effect exists because surfaces with latitude-like components (Sphere, Torus, Cylinder) create position correlation with n-value. Since the larger factor of a semiprime is typically 2-10% of N, it maps to a similar latitude.
-
-**The Helix has no latitude** — just linear position along the curve — so the effect completely vanishes (2% ≈ below false positive rate).
-
-#### Why This Isn't Exploitable
-
-- Only ~9% of semiprimes show the effect
-- You cannot predict WHICH semiprimes will show it
-- The effect only confirms factors you already know
-- It's a geometric artifact, not factorization information
-
-#### Polyhedral Surfaces (Cube, Tetrahedron, etc.)
-
-These show artificially HIGH hit rates because they have only 4-8 vertices. All points cluster around few positions, making "closeness" meaningless. Not valid test surfaces.
-
-### Summary
-
-The ~9% factor proximity effect is **statistically real** (p ≈ 0.005 for observing 11/121 hits at 5% null rate) but **mathematically trivial** — it emerges from latitude correlation, not from geometry encoding factorization information.
-
-### Actionability Criteria (Why This Isn't Useful for Factoring)
-
-Any claimed factorization signal must pass these tests:
-
-| Criterion | Question | Our Result |
-|-----------|----------|------------|
-| **Null-resistance** | Does it survive permutation + N-scaling + radius tests? | ⚠️ Partially (9% vs 5%) |
-| **Out-of-sample** | Does it work on new data without retuning? | ❌ No predictive power |
-| **Actionability** | Does it reduce search space by 2×, 10×, 100×? | ❌ No — 91% show no signal |
-
-**Verdict:** The effect is a geometric curiosity, not a factorization lever. Treat geometry as a **feature extractor for filters** (sieving), not as a factor oracle.
+| Goal | Surface | Mode | Method |
+|------|---------|------|--------|
+| See divisibility structure | Torus | generic | CRT Residue (210×143) |
+| Factor-based bands | Sphere | generic | SPF Bands |
+| Direct factorization encoding | Sphere | generic | Valuation 3D |
+| Prime sequence patterns | Sphere | primeIndex | spiral |
+| Smooth number clustering | Sphere | generic | Smoothness |
+| BSD reduction visualization | Sphere | generic | spiral + EC Mode |
 
 ## Architecture
 
@@ -199,10 +252,17 @@ Any claimed factorization signal must pass these tests:
 │  - transformN(), map(), nativeMapping()                │
 ├─────────────────────────────────────────────────────────┤
 │  Surface Classes    (θ, φ) → (x, y, z) projections      │
-│  - Sphere, Torus, Helix, etc.                          │
+│  - Sphere, Torus, Helix, Klein, Trefoil, etc.          │
 ├─────────────────────────────────────────────────────────┤
-│  TopologyAnalyzer   Statistical validation              │
+│  TopologyAnalyzer   Statistical validation (FRONTIER)   │
 │  - analyze(), permutationTest(), runFullValidation()   │
+├─────────────────────────────────────────────────────────┤
+│  EC Mode Classes    Elliptic curve analysis             │
+│  - EllipticCurveData, ECModeAnalyzer                   │
+│  - SemiprimeECAnalyzer, FRONTIERExperiment             │
+├─────────────────────────────────────────────────────────┤
+│  OrderGCDTelemetry  Pollard p-1 exploration             │
+│  - runAttack(), stepMode, smoothness estimation        │
 ├─────────────────────────────────────────────────────────┤
 │  PrimeExplorer      Main controller + rendering         │
 │  - generatePoints(), render(), event handlers          │
@@ -214,6 +274,7 @@ Any claimed factorization signal must pass these tests:
 - **N = 5000** runs smoothly on most machines
 - **Color by Hub** was optimized with caching — now O(n) per frame instead of O(n²)
 - **Validation tests** may take a few seconds for permutation testing (1000 iterations)
+- **Order/GCD attacks** are instant for reasonable bounds (< 500)
 
 ## Browser Compatibility
 
@@ -231,6 +292,7 @@ This is a research tool that evolved through iterative investigation. Contributi
 
 - New surface geometries
 - New mapping methods
+- Additional elliptic curves with a_p data
 - Statistical tests
 - Performance optimizations
 - Bug fixes
@@ -242,9 +304,25 @@ MIT License — use freely for research, education, or curiosity.
 ## Acknowledgments
 
 Built through collaborative exploration between human researcher and AI assistant, using:
-- ADEIS methodology (Attune, Derive, Execute, Inhabit, Ship) and some other methodologies
+- ADEIS methodology (Attune, Derive, Execute, Inhabit, Ship)
+- FRONTIER falsification framework
+- Kernel coherence principles
 
 The tool embodies the principle that **rigorous falsification is as valuable as discovery** — knowing what doesn't work is progress.
+
+---
+
+## The Real Outcome
+
+You started with:
+> "What if geometry sees what arithmetic hides?"
+
+You ended with:
+> "Geometry can *test*, *filter*, and *falsify* — but it cannot *extract* hidden multiplicative structure."
+
+**That's a clean scientific result, not a disappointment.**
+
+The primary contribution is not a new algorithm, but a **map of where not to look — and why**.
 
 ---
 
