@@ -1061,6 +1061,9 @@
                 <button class="btn" id="panDownBtn" title="Pan Down">⬇️</button>
                 <button class="btn" id="panLeftBtn" title="Pan Left">⬅️</button>
                 <button class="btn" id="panRightBtn" title="Pan Right">➡️</button>
+                <button class="btn" id="viewTopBtn" title="View from Above (North Pole)">🔝</button>
+                <button class="btn" id="viewBottomBtn" title="View from Below (South Pole)">🔻</button>
+                <button class="btn" id="viewSideBtn" title="View from Side (Equator)">◀️</button>
             </div>
             
             <div class="hover-info" id="hoverInfo">
@@ -1898,10 +1901,11 @@
                     break;
                     
                 // Valuation 3D - prime powers become geometric axes
+                // Uses ORIGINAL n for valuations (intrinsic property)
                 case 'valuation3D':
-                    const v2 = PrimeMath.valuation(Math.round(effectiveN), 2);
-                    const v3 = PrimeMath.valuation(Math.round(effectiveN), 3);
-                    const v5 = PrimeMath.valuation(Math.round(effectiveN), 5);
+                    const v2 = PrimeMath.valuation(n, 2);  // <-- ORIGINAL n
+                    const v3 = PrimeMath.valuation(n, 3);  // <-- ORIGINAL n
+                    const v5 = PrimeMath.valuation(n, 5);  // <-- ORIGINAL n
                     theta = Math.PI * 2 * (v2 + v3 * 0.1) / 10;
                     phi = Math.PI * (0.1 + 0.8 * Math.tanh((v2 + v3 + v5) / 3));
                     break;
@@ -1924,8 +1928,9 @@
                     break;
                     
                 // Smallest Prime Factor bands
+                // Uses ORIGINAL n for SPF (intrinsic property)
                 case 'spfBands':
-                    const spf = PrimeMath.smallestFactor(Math.round(effectiveN));
+                    const spf = PrimeMath.smallestFactor(n);  // <-- ORIGINAL n
                     // SPF determines the "ring" (phi), n determines position in ring (theta)
                     theta = PrimeMath.GOLDEN_ANGLE * effectiveN;
                     // Map SPF to latitude bands: 2→top, 3→next, etc.
@@ -1934,13 +1939,20 @@
                     break;
                     
                 // Smoothness mapping - smooth numbers cluster
-                case 'smoothness':
-                    const smooth = PrimeMath.smoothness(Math.round(effectiveN), 7);
-                    const maxSmooth = Math.log2(effectiveMaxN) * 2; // approximate max smoothness
-                    theta = PrimeMath.GOLDEN_ANGLE * effectiveN;
-                    // High smoothness → near pole (small phi), low smoothness → equator
-                    phi = Math.PI * (1 - 0.8 * Math.min(smooth / maxSmooth, 1));
+                // NOTE: We use the ORIGINAL n for smoothness calculation, not effectiveN
+                // because smoothness is an intrinsic property of n, not its transformed position
+                case 'smoothness': {
+                    // Use ORIGINAL n for smoothness (it's an intrinsic property of the number)
+                    // but use effectiveN for the angular position (theta)
+                    const smooth = PrimeMath.smoothness(n, 7);  // <-- ORIGINAL n, not effectiveN
+                    const maxSmooth = Math.max(12, Math.ceil(Math.log2(maxN)));
+                    theta = PrimeMath.GOLDEN_ANGLE * effectiveN;  // Position uses transformed n
+                    const smoothRatio = Math.min(smooth / maxSmooth, 1);
+                    // High smoothness → LOW phi → North pole (z positive)
+                    // Low smoothness → HIGH phi → South pole (z negative)
+                    phi = Math.PI * (0.95 - smoothRatio * 0.9);
                     break;
+                }
                 
                 // CONTROL: Random mapping for hypothesis testing
                 case '_randomControl':
@@ -4271,6 +4283,33 @@
             this.renderer.panOffset.x += 50;
         }
         
+        // NEW: Camera preset views
+        // Coordinate system: X=right, Y=up, Z=toward viewer (after projection)
+        // Sphere: phi=0 → z=1 (north pole at +Z), phi=π → z=-1 (south pole at -Z)
+        
+        viewFromTop() {
+            // See North Pole at center of screen
+            // With rotX=0, rotY=0: pole (0,0,1) projects to screen center
+            // Smooth numbers (near pole) appear as bright cluster at center
+            this.renderer.rotation.x = 0;
+            this.renderer.rotation.y = 0;
+            this.renderer.panOffset = { x: 0, y: 0 };
+        }
+        
+        viewFromBottom() {
+            // See South Pole at center (flip upside down)
+            this.renderer.rotation.x = Math.PI;
+            this.renderer.rotation.y = 0;
+            this.renderer.panOffset = { x: 0, y: 0 };
+        }
+        
+        viewFromSide() {
+            // Tilted side view (equator visible as horizontal band)
+            this.renderer.rotation.x = 0.3;
+            this.renderer.rotation.y = 0;
+            this.renderer.panOffset = { x: 0, y: 0 };
+        }
+        
         _setupEvents() {
             // Debounced resize handler - fixes browser zoom issues
             let resizeTimeout;
@@ -5582,6 +5621,9 @@
     document.getElementById('panDownBtn').addEventListener('click', () => explorer.panDown());
     document.getElementById('panLeftBtn').addEventListener('click', () => explorer.panLeft());
     document.getElementById('panRightBtn').addEventListener('click', () => explorer.panRight());
+    document.getElementById('viewTopBtn').addEventListener('click', () => explorer.viewFromTop());
+    document.getElementById('viewBottomBtn').addEventListener('click', () => explorer.viewFromBottom());
+    document.getElementById('viewSideBtn').addEventListener('click', () => explorer.viewFromSide());
     document.getElementById('spinToggleBtn').addEventListener('click', e => {
         explorer.autoRotate = !explorer.autoRotate;
         e.target.classList.toggle('active', explorer.autoRotate);
